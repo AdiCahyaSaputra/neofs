@@ -19,6 +19,11 @@ end
 
 NeofsCustomMappings = {}
 
+local reopen = function ()
+  NeofsQuit()
+  M.open()
+end
+
 function M.util.map(array, f)
   local new = {}
   for _, x in ipairs(array) do
@@ -128,9 +133,13 @@ function NeofsCreateFile()
   if name == "" then
     return
   end
-  local file = vim.loop.fs_open(M.fm.path .. M.fs_seperator .. name, 'w', 0640)
-  vim.loop.fs_close(file)
-  NeofsRefresh()
+
+  NeofsQuit()
+
+  local create_file = '!touch ' .. name
+  vim.cmd(create_file)
+
+  M.open()
 end
 
 function NeofsCreateDirectory()
